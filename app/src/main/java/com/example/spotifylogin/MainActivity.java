@@ -46,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
         Button btnClickMe = (Button) findViewById(R.id.newPlaylist);
-        btnClickMe.setOnClickListener(v -> openActivity(this,NewPlaylist.class));
+        btnClickMe.setOnClickListener(v -> openActivity(this, NewPlaylist.class));
 
         Button btnSongs = (Button) findViewById(R.id.songsButton);
-        btnSongs.setOnClickListener(v ->  openActivity(this,Songs.class));
+        btnSongs.setOnClickListener(v -> openActivity(this, Songs.class));
 
         Button btnArtists = (Button) findViewById(R.id.artistButton);
-        btnArtists.setOnClickListener(v ->  openActivity(this,Artists.class));
+        btnArtists.setOnClickListener(v -> openActivity(this, Artists.class));
 
 //        try {
 //            this.readVectorsFile();
@@ -111,14 +111,15 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < n; i++) {
                 String idToSearch = arrayCosine.get(i).getId();
                 SongArtist toRecommend = hashSongArtist.get(idToSearch);
-                songsList.add(new ListItem(toRecommend.getTitle(),toRecommend.getArtist()));
+                songsList.add(new ListItem(toRecommend.getTitle(), toRecommend.getArtist()));
             }
-            return  songsList;
+            return songsList;
         }
 
 
         return null;
     }
+
     public HashMap<String, SongVector> readVectorsFile(Context context) throws IOException {
         HashMap<String, SongVector> hashVectors = new HashMap<>();
         try {
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             String line = "";
             while ((line = buffereReader.readLine()) != null) {
 
-                line = buffereReader.readLine();
+//                line = buffereReader.readLine();
                 if (line != null) {
                     String[] data = line.split(",");
                     String song_id = data[0];
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             String line = "";
             while ((line = buffereReader.readLine()) != null) {
 
-                line = buffereReader.readLine();
+//                line = buffereReader.readLine();
                 // System.out.println(line);
                 if (line == null) {
                     break;
