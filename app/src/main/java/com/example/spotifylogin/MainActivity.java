@@ -211,8 +211,7 @@ public class MainActivity extends AppCompatActivity {
                                 in.close();
 
                                 for (int i = 0; i < idPlaylist.size(); i++) {
-                                    URL urlTracks = new URL("https:" + idPlaylist.get(i).toString() + "?fields=items(track(id,name))");
-//                                    URL urlTracks = new URL("https:" + idPlaylist.get(i).toString() + "?fields=items(track(id,name,artists))");
+                                    URL urlTracks = new URL("https:" + idPlaylist.get(i).toString() + "?fields=items(track(id,name,artists(id,name)))");
                                     urlConnection = (HttpURLConnection) urlTracks.openConnection();
                                     urlConnection.setRequestProperty("Authorization", "Bearer " + authToken);
                                     if (urlConnection.getResponseCode() != 200) {
