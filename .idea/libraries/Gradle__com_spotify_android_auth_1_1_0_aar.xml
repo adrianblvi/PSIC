@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d45401bc4d9cecd69914860fe4a640f4/jetified-auth-1.1.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d45401bc4d9cecd69914860fe4a640f4/jetified-auth-1.1.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d45401bc4d9cecd69914860fe4a640f4/jetified-auth-1.1.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1e9a996424a4f46193d14c092778d8c7/jetified-auth-1.1.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1e9a996424a4f46193d14c092778d8c7/jetified-auth-1.1.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1e9a996424a4f46193d14c092778d8c7/jetified-auth-1.1.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.spotify.android/auth/1.1.0/d3991aeaf40f27df30df0a458167fd1ad6afa818/auth-1.1.0-javadoc.jar!/" />
