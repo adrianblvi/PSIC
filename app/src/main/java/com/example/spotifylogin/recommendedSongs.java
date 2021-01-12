@@ -42,17 +42,17 @@ public class recommendedSongs extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String song_id = (String) bundle.get("song_id");
 
-        HashMap<String, SongVector> hashVectors;
-        HashMap<String, SongArtist> hashSongArtist;
+        HashMap<String, SongFeatures> hashVectors;
+        HashMap<String, SpotifySong> hashSongArtist;
         ArrayList<ListItem> songsList = new ArrayList<>();
-
         try {
-            hashVectors = mainActivity.readVectorsFile(this);
-            hashSongArtist = mainActivity.readSongsArtistFile(this);
-            songsList = mainActivity.obtainTopnRecommendations(song_id, hashSongArtist, hashVectors, 20);
+            hashVectors = mainActivity.readFeatures(this);
+            hashSongArtist = mainActivity.readSongs(this);
+            songsList = mainActivity.obtainTopRecommendation(song_id, hashSongArtist, hashVectors);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 

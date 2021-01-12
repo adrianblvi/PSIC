@@ -15,6 +15,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,12 +55,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnArtists = (Button) findViewById(R.id.artistButton);
         btnArtists.setOnClickListener(v -> openActivity(this, Artists.class));
 
-//        try {
-//            this.readVectorsFile();
-//            this.readSongsArtistFile();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void openActivity(Context context, Class parameterClass) {
@@ -86,93 +81,129 @@ public class MainActivity extends AppCompatActivity {
         return sumProduct / (Math.sqrt(sumASq) * Math.sqrt(sumBSq));
     }
 
-    public ArrayList<ListItem> obtainTopnRecommendations(String song_id, HashMap<String, SongArtist> hashSongArtist,
-                                                         HashMap<String, SongVector> hashVectors, int n) {
-
-        HashMap<String, SongCosine> hashCosineResults = new HashMap<>();
-        ArrayList<ListItem> songsList = new ArrayList<>();
-        SongArtist search = hashSongArtist.get(song_id);
-
-        if (search == null) {
-            System.out.println("Song with id " + song_id + " doesnt exist");
-        } else {
-            Double[] A = hashVectors.get(song_id).getVector();
-            for (SongVector string : hashVectors.values()) {
-                if (!(string.getId().equals(song_id))) {
-                    Double[] B = string.getVector();
-                    double cosineValue = calculateCosineSimilarity(A, B);
-                    hashCosineResults.put(string.getId(), new SongCosine(string.getId(), cosineValue));
+    public void contentBased(ArrayList<String> ids, HashMap<String, SongFeatures> features, HashMap<String, SpotifySong> songs) {
+        ArrayList<SongFeatures> playlist = new ArrayList<>();
+        ArrayList<SongCosine> results = new ArrayList<>();
+        HashMap<String, SongFeatures> copied = (HashMap<String, SongFeatures>) features.clone();
+        for (String id : ids
+        ) {
+            SongFeatures featToAdd = features.get(id);
+            if (featToAdd != null) {
+                playlist.add(featToAdd);
+            }
+        }
+        Double[] vector = new Double[23];
+        int i = 0;
+        for (SongFeatures string :
+                playlist) {
+            if (i == 0) {
+                vector = string.getFeatures();
+                i++;
+            } else {
+                Double[] vectorB = string.getFeatures();
+                for (int j = 0; j < vectorB.length; j++) {
+                    vector[j] += vectorB[j];
                 }
             }
-            ArrayList<SongCosine> arrayCosine = new ArrayList<>(hashCosineResults.values());
-            Collections.sort(arrayCosine);
-            ArrayList<String> recommendedTitles = new ArrayList<>();
-//            System.out.println("Top " + n + " recommendations for: " + search.getTitle() + " ---- " + search.getArtist() + "\n");
-            for (int i = 0; i < n; i++) {
-                String idToSearch = arrayCosine.get(i).getId();
-                SongArtist toRecommend = hashSongArtist.get(idToSearch);
-                songsList.add(new ListItem(toRecommend.getTitle(), toRecommend.getArtist()));
-            }
-            return songsList;
         }
-
-
-        return null;
+        for (int j = 0; j < vector.length; j++) {
+            vector[j] = vector[j] / vector.length;
+        }
+        Double[] userVector = vector;
+        for (SongFeatures string :
+                playlist) {
+            String id = string.getId();
+            copied.remove(id);
+        }
+        for (SongFeatures feat :
+                copied.values()) {
+            Double[] vectorB = feat.getFeatures();
+            Double cosine = calculateCosineSimilarity(userVector, vectorB);
+            SongCosine songToadd = new SongCosine(feat.getId(), cosine);
+            results.add(songToadd);
+        }
+        Collections.sort(results);
+        System.out.println();
+        System.out.println("*** Recommended Songs ***");
+        for (int j = 0; j < 10; j++) {
+            SpotifySong song = songs.get(results.get(j).getId());
+            System.out.println(song.getTitle() + "  --  " + song.getArtists());
+        }
     }
 
-    public HashMap<String, SongVector> readVectorsFile(Context context) throws IOException {
-        HashMap<String, SongVector> hashVectors = new HashMap<>();
-        try {
-            InputStream fileReader = context.getResources().openRawResource(R.raw.song_vectors);
-            BufferedReader buffereReader = new BufferedReader(new InputStreamReader(fileReader));
-            String line = "";
-            while ((line = buffereReader.readLine()) != null) {
+    public  ArrayList<ListItem> obtainTopRecommendation(String id, HashMap<String, SpotifySong> songs, HashMap<String, SongFeatures> features) {
+        HashMap<String, SongCosine> results = new HashMap<>();
+        ArrayList<ListItem> songsList = new ArrayList<>();
+        SongFeatures toObtain = features.get(id);
+        Double[] vectorA = toObtain.getFeatures();
+        for (SongFeatures song :
+                features.values()) {
+            if (!(song.getId().equals(id))) {
+                Double[] vectorB = song.getFeatures();
+                Double cosine = calculateCosineSimilarity(vectorA, vectorB);
+                results.put(song.getId(), new SongCosine(song.getId(), cosine));
+            } else {
+                results.put(song.getId(), new SongCosine(song.getId(), 0.00));
+            }
 
-//                line = buffereReader.readLine();
-                if (line != null) {
+        }
+        ArrayList<SongCosine> toSort = new ArrayList<>(results.values());
+        Collections.sort(toSort);
+        for (int i = 0; i < 15; i++) {
+            SpotifySong toRecommend = songs.get(toSort.get(i).getId());
+            songsList.add(new ListItem(toRecommend.getTitle(), toRecommend.getArtists()));
+        }
+        return songsList;
+    }
+
+    public HashMap<String, SpotifySong> readSongs(Context context) throws IOException {
+
+        HashMap<String, SpotifySong> songs = new HashMap<>();
+        try {
+            InputStream fileReader = context.getResources().openRawResource(R.raw.songs_info);
+            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(fileReader));
+            String line = "";
+            while ((line = bufferReader.readLine()) != null) {
+                String[] data = line.trim().split(";");
+                SpotifySong song = new SpotifySong(data[0], data[1], data[2].trim().replace('[', ' ').replace(']', ' ').replace("'", " "));
+                songs.put(song.getId(), song);
+            }
+            bufferReader.close();
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return songs;
+    }
+
+    public HashMap<String, SongFeatures> readFeatures(Context context) throws IOException {
+        HashMap<String, SongFeatures> features = new HashMap<>();
+        try {
+            InputStream fileReader = context.getResources().openRawResource(R.raw.song_features);
+            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(fileReader));
+            String line = "";
+            int j = 0;
+            while ((line = bufferReader.readLine()) != null) {
+                if (j != 0) {
                     String[] data = line.split(",");
                     String song_id = data[0];
-                    Double vector[] = new Double[32];
+                    Double vector[] = new Double[23];
                     for (int i = 0; i < vector.length; i++) {
                         vector[i] = Double.valueOf(data[i + 1]);
                     }
-                    hashVectors.put(song_id, new SongVector(song_id, vector));
-                }
-            }
-
-            buffereReader.close();
-            fileReader.close();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-        return hashVectors;
-    }
-
-    public HashMap<String, SongArtist> readSongsArtistFile(Context context) throws IOException {
-        HashMap<String, SongArtist> hashSongArtist = new HashMap<>();
-        try {
-            InputStream fileReader = context.getResources().openRawResource(R.raw.song_mapper);
-            BufferedReader buffereReader = new BufferedReader(new InputStreamReader(fileReader));
-            String line = "";
-            while ((line = buffereReader.readLine()) != null) {
-
-//                line = buffereReader.readLine();
-                // System.out.println(line);
-                if (line == null) {
-                    break;
+                    features.put(song_id, new SongFeatures(song_id, vector));
                 } else {
-                    String[] data = line.split(",");
-                    hashSongArtist.put(data[0], new SongArtist(data[0], data[1], data[2]));
+                    j++;
                 }
             }
-
-            buffereReader.close();
+            bufferReader.close();
             fileReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return hashSongArtist;
+        return features;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {

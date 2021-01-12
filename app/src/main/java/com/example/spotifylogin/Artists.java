@@ -39,20 +39,20 @@ public class Artists extends AppCompatActivity {
         Button btnArtists = (Button) findViewById(R.id.artistButton);
         btnArtists.setOnClickListener(v -> mainActivity.openActivity(this,Artists.class));
 
-        HashMap<String, SongArtist> hashSongArtist = new HashMap<>();
+        HashMap<String, SpotifySong> hashSongArtist = new HashMap<>();
 
         try {
-            hashSongArtist = mainActivity.readSongsArtistFile(this);
+            hashSongArtist = mainActivity.readSongs(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ArrayList<SongArtist> toArray = new ArrayList<>(hashSongArtist.values());
+        ArrayList<SpotifySong> toArray = new ArrayList<>(hashSongArtist.values());
         ArrayList<String> artists = new ArrayList<>();
         ArrayList<ListItem> songsList = new ArrayList<>();
 
         for (int i = 0; i < toArray.size(); i++) {
-            artists.add(toArray.get(i).getArtist());
+            artists.add(toArray.get(i).getArtists());
         }
 
         Set<String> hashSet = new HashSet<String>(artists);
