@@ -28,16 +28,16 @@ public class Artists extends AppCompatActivity {
         setContentView(R.layout.activity_artists);
 
         Button btnHome = (Button) findViewById(R.id.homeButton);
-        btnHome.setOnClickListener((v -> mainActivity.openActivity(this,MainActivity.class)));
+        btnHome.setOnClickListener((v -> mainActivity.openActivity(this, MainActivity.class)));
 
         Button btnClickMe = (Button) findViewById(R.id.newPlaylist);
-        btnClickMe.setOnClickListener(v -> mainActivity.openActivity(this,NewPlaylist.class));
+        btnClickMe.setOnClickListener(v -> mainActivity.openActivity(this, NewPlaylist.class));
 
         Button btnSongs = (Button) findViewById(R.id.songsButton);
-        btnSongs.setOnClickListener(v -> mainActivity.openActivity(this,Songs.class));
+        btnSongs.setOnClickListener(v -> mainActivity.openActivity(this, Songs.class));
 
         Button btnArtists = (Button) findViewById(R.id.artistButton);
-        btnArtists.setOnClickListener(v -> mainActivity.openActivity(this,Artists.class));
+        btnArtists.setOnClickListener(v -> mainActivity.openActivity(this, Artists.class));
 
         HashMap<String, SpotifySong> hashSongArtist = new HashMap<>();
 
@@ -51,8 +51,12 @@ public class Artists extends AppCompatActivity {
         ArrayList<String> artists = new ArrayList<>();
         ArrayList<ListItem> songsList = new ArrayList<>();
 
-        for (int i = 0; i < toArray.size(); i++) {
-            artists.add(toArray.get(i).getArtists());
+        for (SpotifySong song :
+                hashSongArtist.values()) {
+            String[] data = song.getArtists().trim().split(",");
+            for (int i = 0; i < data.length; i++) {
+                artists.add(data[0].replace('"', ' ').trim());
+            }
         }
 
         Set<String> hashSet = new HashSet<String>(artists);
@@ -60,7 +64,8 @@ public class Artists extends AppCompatActivity {
         artists.addAll(hashSet);
         artists.sort(String::compareTo);
 
-        for (int i = 0; i < artists.size(); i++) songsList.add(new ListItem(artists.get(i),artists.get(i)));
+        for (int i = 0; i < artists.size(); i++)
+            songsList.add(new ListItem(artists.get(i), artists.get(i)));
 
         AdapterArtists adapterArtists = new AdapterArtists(this, songsList);
 

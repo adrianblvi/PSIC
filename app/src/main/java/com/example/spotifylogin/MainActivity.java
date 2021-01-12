@@ -130,7 +130,23 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(song.getTitle() + "  --  " + song.getArtists());
         }
     }
+    public void artistSongs(HashMap<String, SpotifySong> songs) {
+        ArrayList<String> artistSongs = new ArrayList<>();
+        String artist = "Bad Bunny";
+        System.out.println();
+        System.out.println("Songs for : " + artist);
+        for (SpotifySong song :
+                songs.values()) {
+            if (song.getArtists().contains(artist)) {
+                artistSongs.add(song.getTitle() + " -- " + song.getArtists());
+            }
+        }
+        for (String str :
+                artistSongs) {
+            System.out.println(str);
+        }
 
+    }
     public  ArrayList<ListItem> obtainTopRecommendation(String id, HashMap<String, SpotifySong> songs, HashMap<String, SongFeatures> features) {
         HashMap<String, SongCosine> results = new HashMap<>();
         ArrayList<ListItem> songsList = new ArrayList<>();
