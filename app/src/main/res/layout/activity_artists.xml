@@ -6,39 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Artists">
 
-    <SearchView
-        android:id="@+id/search"
-        android:layout_width="315dp"
-        android:layout_height="47dp"
-        android:queryHint="Search Name"
-        app:layout_constraintBottom_toTopOf="@+id/listViewArtists"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/textView_toolBar_artist"
-            android:layout_width="193dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="4dp"
-            android:text="Artists"
-            android:textAlignment="textStart"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
-    </SearchView>
-    <ListView
-        android:id="@+id/listViewArtists"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="45dp"
-        android:layout_marginBottom="70dp"
-        android:scrollbarStyle="insideOverlay"
-        android:layout_below="@id/search"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/newPlaylist"
         style="@style/Widget.AppCompat.Button.Small"
@@ -87,5 +54,38 @@
         app:icon="@drawable/home"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_artists"
+        android:layout_width="406dp"
+        android:layout_height="40dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/listViewArtists"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
+    <ListView
+        android:id="@+id/listViewArtists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="70dp"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="315dp"
+        android:layout_height="47dp"
+        android:queryHint="Search Name"
+        app:layout_constraintBottom_toTopOf="@+id/listViewArtists"
+        app:layout_constraintStart_toStartOf="parent"></SearchView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
