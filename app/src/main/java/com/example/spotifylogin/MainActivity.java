@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ListView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
@@ -54,6 +57,23 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnArtists = (Button) findViewById(R.id.artistButton);
         btnArtists.setOnClickListener(v -> openActivity(this, Artists.class));
+
+        ArrayList<String> spotify_playlists = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            spotify_playlists.add("Playlist " + (i+1));
+        }
+
+        ListView listview = findViewById(R.id.Spotify_playlists);
+        AdapterPlaylists adapterPlaylists = new AdapterPlaylists(this, spotify_playlists);
+        listview.setAdapter(adapterPlaylists);
+
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+                    String name = spotify_playlists.get(position);
+                    Snackbar snackbar = Snackbar.make(view, name, BaseTransientBottomBar.LENGTH_SHORT);
+                    snackbar.show();
+                }
+        );
 
     }
 
@@ -130,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(song.getTitle() + "  --  " + song.getArtists());
         }
     }
+
     public void artistSongs(HashMap<String, SpotifySong> songs) {
         ArrayList<String> artistSongs = new ArrayList<>();
         String artist = "Bad Bunny";
@@ -147,7 +168,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public  ArrayList<ListItem> obtainTopRecommendation(String id, HashMap<String, SpotifySong> songs, HashMap<String, SongFeatures> features) {
+
+    public ArrayList<ListItem> obtainTopRecommendation(String id, HashMap<String, SpotifySong> songs, HashMap<String, SongFeatures> features) {
         HashMap<String, SongCosine> results = new HashMap<>();
         ArrayList<ListItem> songsList = new ArrayList<>();
         SongFeatures toObtain = features.get(id);
