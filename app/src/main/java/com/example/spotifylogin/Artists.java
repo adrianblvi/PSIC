@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,15 +63,34 @@ public class Artists extends AppCompatActivity {
         Set<String> hashSet = new HashSet<String>(artists);
         artists.clear();
         artists.addAll(hashSet);
-        artists.sort(String::compareTo);
+//        artists.sort(String::compareTo);
+//
+//        for (int i = 0; i < artists.size(); i++)
+//            songsList.add(new ListItem(artists.get(i), artists.get(i)));
+//
+//        AdapterArtists adapterArtists = new AdapterArtists(this, songsList);
+//
+//        ListView listview = findViewById(R.id.listViewArtists);
+//        listview.setAdapter(adapterArtists);
 
-        for (int i = 0; i < artists.size(); i++)
-            songsList.add(new ListItem(artists.get(i), artists.get(i)));
+        ListView lv = (ListView) findViewById(R.id.listViewArtists);
+        SearchView sv = (SearchView) findViewById(R.id.search);
 
-        AdapterArtists adapterArtists = new AdapterArtists(this, songsList);
 
-        ListView listview = findViewById(R.id.listViewArtists);
-        listview.setAdapter(adapterArtists);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artists);
+        lv.setAdapter(adapter);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
     }
 }
