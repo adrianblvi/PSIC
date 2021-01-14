@@ -1,6 +1,10 @@
 package com.example.spotifylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,9 +22,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class Songs extends AppCompatActivity {
+public class Songs extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     MainActivity mainActivity = new MainActivity();
+    private ArrayList<ListItem> songList;
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private recyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +36,16 @@ public class Songs extends AppCompatActivity {
         setContentView(R.layout.activity_songs);
 
         Button btnHome = (Button) findViewById(R.id.homeButton);
-        btnHome.setOnClickListener(v -> mainActivity.openActivity(this,MainActivity.class));
+        btnHome.setOnClickListener(v -> mainActivity.openActivity(this, MainActivity.class));
 
         Button btnClickMe = (Button) findViewById(R.id.newPlaylist);
-        btnClickMe.setOnClickListener(v -> mainActivity.openActivity(this,NewPlaylist.class));
+        btnClickMe.setOnClickListener(v -> mainActivity.openActivity(this, NewPlaylist.class));
 
         Button btnSongs = (Button) findViewById(R.id.songsButton);
-        btnSongs.setOnClickListener(v -> mainActivity.openActivity(this,Songs.class));
+        btnSongs.setOnClickListener(v -> mainActivity.openActivity(this, Songs.class));
 
         Button btnArtists = (Button) findViewById(R.id.artistButton);
-        btnArtists.setOnClickListener(v -> mainActivity.openActivity(this,Artists.class));
+        btnArtists.setOnClickListener(v -> mainActivity.openActivity(this, Artists.class));
 
         HashMap<String, SpotifySong> hashSongArtist = new HashMap<>();
         try {
@@ -45,33 +53,37 @@ public class Songs extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        ArrayList<SpotifySong> toArray = new ArrayList<>(hashSongArtist.values());
-        ArrayList<String> titles = new ArrayList<>();
-        ArrayList<ListItem> songsList = new ArrayList<>();
-
-        for (int i = 0; i < toArray.size(); i++) songsList.add(new ListItem(toArray.get(i).getTitle(),toArray.get(i).getArtists()));
-        for (int i = 0; i < toArray.size(); i++) titles.add(toArray.get(i).getTitle());
-
-        titles.sort(String::compareTo);
-        songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
-
-        ListView listview = findViewById(R.id.listViewSongs);
-        AdapterSongs adapterSongs = new AdapterSongs(this, songsList);
-        listview.setAdapter(adapterSongs);
-
-        listview.setOnItemClickListener((parent, view, position, id) -> {
-            String song_id = null;
-            String title = titles.get(position);
-            for (int i = 0; i < toArray.size(); i++) {
-                if (title.equals(toArray.get(i).getTitle())) {
-                    song_id = toArray.get(i).getId();
-                }
-            }
-            Intent myIntent = new Intent(view.getContext(), recommendedSongs.class);
-            myIntent.putExtra("song_id", song_id);
-            startActivity(myIntent);
+        recyclerView = findViewById(R.id.search);
+        searchView = findViewById(R.id.searchView);
+        songList = new ArrayList<>();
+        for (SpotifySong song : hashSongArtist.values()) {
+            songList.add(new ListItem(song.getTitle(), song.getArtists()));
         }
-        );
+        setAdapter();
+        initListener();
+
+    }
+
+    private void initListener() {
+        searchView.setOnQueryTextListener(this);
+    }
+
+    private void setAdapter() {
+        adapter = new recyclerAdapter(songList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+        return false;
     }
 }
