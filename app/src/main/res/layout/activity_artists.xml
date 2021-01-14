@@ -8,23 +8,25 @@
 
     <Button
         android:id="@+id/newPlaylist"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="135dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="0dp"
-        android:text="New Playlist"
+        android:layout_height="40dp"
+        android:background="?attr/colorPrimary"
+        android:text="Playlists"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_queue_music_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/songsButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/songsButton"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="135dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_marginTop="460dp"
-        android:layout_marginBottom="0dp"
+        android:background="?attr/colorPrimary"
         android:text="SONGS"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_music_note_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/artistButton"
         app:layout_constraintStart_toEndOf="@+id/newPlaylist"
@@ -32,12 +34,13 @@
 
     <Button
         android:id="@+id/artistButton"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="135dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_marginTop="584dp"
-        android:layout_marginBottom="0dp"
+        android:background="?attr/colorPrimary"
         android:text="ARTISTS"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_recent_actors_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/songsButton"
@@ -51,6 +54,7 @@
         android:layout_marginTop="8dp"
         android:text="Home"
         android:textSize="10sp"
+        android:background="@android:color/transparent"
         app:icon="@drawable/home"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
