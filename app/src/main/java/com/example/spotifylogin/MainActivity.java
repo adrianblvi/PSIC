@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> spotify_playlists = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            spotify_playlists.add("Playlist " + (i+1));
+            spotify_playlists.add("Playlist " + (i + 1));
         }
 
         ListView listview = findViewById(R.id.Spotify_playlists);
@@ -151,21 +151,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void artistSongs(HashMap<String, SpotifySong> songs) {
+    public void artistSongs(HashMap<String, SpotifySong> songs, String artist) {
         ArrayList<String> artistSongs = new ArrayList<>();
-        String artist = "Bad Bunny";
-        System.out.println();
-        System.out.println("Songs for : " + artist);
+        HashMap<String, SpotifySong> songs_Of_artist= new HashMap<>();
         for (SpotifySong song :
                 songs.values()) {
             if (song.getArtists().contains(artist)) {
                 artistSongs.add(song.getTitle() + " -- " + song.getArtists());
+                SpotifySong to_add = new SpotifySong(song.getId(),song.getTitle(),song.getArtists());
+                songs_Of_artist.put(to_add.getId(),to_add);
             }
         }
-        for (String str :
-                artistSongs) {
-            System.out.println(str);
-        }
+
 
     }
 
