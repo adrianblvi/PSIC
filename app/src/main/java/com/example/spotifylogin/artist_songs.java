@@ -32,5 +32,6 @@ public class artist_songs extends AppCompatActivity {
         tv.setText(artist +" songs");
         AdapterSongs adapterArtistSongs = new AdapterSongs(this, songs);
         listview.setAdapter(adapterArtistSongs);
+
     }
 }

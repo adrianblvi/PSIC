@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -63,24 +64,20 @@ public class Artists extends AppCompatActivity {
         Set<String> hashSet = new HashSet<String>(artists);
         artists.clear();
         artists.addAll(hashSet);
-//        artists.sort(String::compareTo);
-//
-//        for (int i = 0; i < artists.size(); i++)
-//            songsList.add(new ListItem(artists.get(i), artists.get(i)));
-//
-//        AdapterArtists adapterArtists = new AdapterArtists(this, songsList);
-//
-//        ListView listview = findViewById(R.id.listViewArtists);
-//        listview.setAdapter(adapterArtists);
+        for (int i = 0; i < artists.size(); i++) {
+            ListItem item = new ListItem("Da igual", artists.get(i));
+            songsList.add(item);
+        }
 
         ListView lv = (ListView) findViewById(R.id.listViewArtists);
         SearchView sv = (SearchView) findViewById(R.id.search);
 
 
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artists);
-        lv.setAdapter(adapter);
+//        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artists);
+        AdapterArtists artAdapter = new AdapterArtists(this, songsList);
+        lv.setAdapter(artAdapter);
         lv.setOnItemClickListener((parent, view, position, id) -> {
-            String artist_name = artists.get(position);
+            String artist_name = songsList.get(position).getArtist();
             Intent myIntent = new Intent(view.getContext(), artist_songs.class);
             myIntent.putExtra("artist_name", artist_name);
             startActivity(myIntent);
@@ -93,7 +90,8 @@ public class Artists extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+//                adapter.getFilter().filter(newText);
+                artAdapter.getFilter().filter(newText);
                 return false;
             }
         });
