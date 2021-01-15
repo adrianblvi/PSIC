@@ -83,7 +83,10 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
                 ListItem clicked = songList.get(position);
                 for (SpotifySong song : hashSongArtist.values()) {
                     if (clicked.getTitle().trim().equals(song.getTitle().trim())) {
-
+                        String id = song.getId();
+                        Intent myIntent = new Intent(recyclerView.getContext(), recommendedSongs.class);
+                        myIntent.putExtra("song_id",id);
+                        startActivity(myIntent);
                     }
                 }
             }

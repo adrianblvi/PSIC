@@ -54,7 +54,7 @@ public class recommendedSongs extends AppCompatActivity {
         }
 
 
-        songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
+        //songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
         ListView listview = findViewById(R.id.list_view_reco_songs);
         AdapterSongs adapterRecommendedSongs = new AdapterSongs(this, songsList);
