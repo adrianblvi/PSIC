@@ -11,7 +11,7 @@
         android:theme="@style/Theme.SpotifyLogin">
         <activity
             android:name=".artist_songs"
-            android:label="@string/title_activity_artist_songs"></activity>
+            android:label="Artist Songs"></activity>
 
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld

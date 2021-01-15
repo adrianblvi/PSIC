@@ -79,6 +79,12 @@ public class Artists extends AppCompatActivity {
 
         ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artists);
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            String artist_name = artists.get(position);
+            Intent myIntent = new Intent(view.getContext(), artist_songs.class);
+            myIntent.putExtra("artist_name", artist_name);
+            startActivity(myIntent);
+        });
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -91,12 +97,7 @@ public class Artists extends AppCompatActivity {
                 return false;
             }
         });
-        lv.setOnItemClickListener((parent, view, position, id) -> {
-            String artist_name = artists.get(position);
-            Intent myIntent = new Intent(view.getContext(), artist_songs.class);
-            myIntent.putExtra("artist_name", artist_name);
-            startActivity(myIntent);
-        });
+
 
     }
 }
