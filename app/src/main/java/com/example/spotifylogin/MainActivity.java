@@ -151,18 +151,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void artistSongs(HashMap<String, SpotifySong> songs, String artist) {
-        ArrayList<String> artistSongs = new ArrayList<>();
-        HashMap<String, SpotifySong> songs_Of_artist= new HashMap<>();
+    public ArrayList<ListItem> artistSongs(HashMap<String, SpotifySong> songs,String artist) throws IOException {
+        ArrayList<ListItem> artistSongs = new ArrayList<>();
         for (SpotifySong song :
                 songs.values()) {
             if (song.getArtists().contains(artist)) {
-                artistSongs.add(song.getTitle() + " -- " + song.getArtists());
-                SpotifySong to_add = new SpotifySong(song.getId(),song.getTitle(),song.getArtists());
-                songs_Of_artist.put(to_add.getId(),to_add);
+                ListItem song_to_add = new ListItem(song.getTitle(), song.getArtists());
+                artistSongs.add(song_to_add);
+
             }
         }
-
+        return artistSongs;
 
     }
 

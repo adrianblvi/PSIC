@@ -91,6 +91,12 @@ public class Artists extends AppCompatActivity {
                 return false;
             }
         });
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            String artist_name = artists.get(position);
+            Intent myIntent = new Intent(view.getContext(), artist_songs.class);
+            myIntent.putExtra("artist_name", artist_name);
+            startActivity(myIntent);
+        });
 
     }
 }
