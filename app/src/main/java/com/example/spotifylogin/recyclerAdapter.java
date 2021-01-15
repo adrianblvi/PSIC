@@ -17,6 +17,16 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
     private ArrayList<ListItem> songList;
     private ArrayList<ListItem> originalItems;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     public recyclerAdapter(ArrayList<ListItem> songList) {
         this.songList = songList;
@@ -29,10 +39,22 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
         private TextView tv_artist;
 
 
-        public MyViewHolder(final View itemView) {
+        public MyViewHolder(final View itemView, final OnItemClickListener listener) {
             super(itemView);
             tv_title = itemView.findViewById(R.id.textView_title);
             tv_artist = itemView.findViewById(R.id.textView_artist);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -40,6 +62,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
     public Filter getFilter() {
         return exampleFilter;
     }
+
     public Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -49,7 +72,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (ListItem item : originalItems) {
-                    if (item.getTitle().toLowerCase().contains(filterPattern)) {
+                    if (item.getTitle().toLowerCase().startsWith(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
@@ -72,7 +95,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
     @Override
     public recyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, mListener);
     }
 
     @Override

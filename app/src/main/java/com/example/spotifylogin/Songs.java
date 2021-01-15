@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
     private RecyclerView recyclerView;
     private SearchView searchView;
     private recyclerAdapter adapter;
+    private HashMap<String, SpotifySong> hashSongArtist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         Button btnArtists = (Button) findViewById(R.id.artistButton);
         btnArtists.setOnClickListener(v -> mainActivity.openActivity(this, Artists.class));
 
-        HashMap<String, SpotifySong> hashSongArtist = new HashMap<>();
+        hashSongArtist = new HashMap<>();
         try {
             hashSongArtist = mainActivity.readSongs(this);
         } catch (IOException e) {
@@ -74,6 +76,18 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new recyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                ListItem clicked = songList.get(position);
+                for (SpotifySong song : hashSongArtist.values()) {
+                    if (clicked.getTitle().trim().equals(song.getTitle().trim())) {
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
