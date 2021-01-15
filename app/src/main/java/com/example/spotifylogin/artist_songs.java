@@ -1,5 +1,6 @@
 package com.example.spotifylogin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 public class artist_songs extends AppCompatActivity {
     MainActivity mainActivity = new MainActivity();
     private ArrayList<ListItem> songs;
+    private HashMap<String, SpotifySong> hashsongs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public class artist_songs extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String artist = (String) bundle.get("artist_name");
         try {
-            HashMap<String, SpotifySong> hashsongs = mainActivity.readSongs(this);
+             hashsongs = mainActivity.readSongs(this);
             songs = mainActivity.artistSongs(hashsongs, artist);
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,6 +34,17 @@ public class artist_songs extends AppCompatActivity {
         tv.setText(artist +" songs");
         AdapterSongs adapterArtistSongs = new AdapterSongs(this, songs);
         listview.setAdapter(adapterArtistSongs);
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+            ListItem clicked = songs.get(position);
+            for (SpotifySong song : hashsongs.values()) {
+                if (clicked.getTitle().trim().equals(song.getTitle().trim())) {
+                    String id_to_send = song.getId();
+                    Intent myIntent = new Intent(view.getContext(), recommendedSongs.class);
+                    myIntent.putExtra("song_id",id_to_send);
+                    startActivity(myIntent);
+                }
+            }
+        });
 
     }
 }
