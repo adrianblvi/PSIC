@@ -1,4 +1,5 @@
 package com.example.spotifylogin;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -65,10 +66,11 @@ public class recommendedSongs extends AppCompatActivity {
         songsList.addAll(hashSet);
         songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
-        String [] artists = song_artist_name.trim().split(",");
+        String[] artists = song_artist_name.trim().split(",");
         TextView textView = findViewById(R.id.textView_reco_songs);
 
-        if(artists.length>1) textView.setText(String.format("Based On \"%s, %s, ...\"", artists[0].trim(),artists[1].trim()));
+        if (artists.length > 1)
+            textView.setText(String.format("Based On \"%s, %s, ...\"", artists[0].trim(), artists[1].trim()));
         else textView.setText(String.format("Based On \"%s\"", song_artist_name.trim()));
 
         ListView listview = findViewById(R.id.list_view_reco_songs);
@@ -78,10 +80,11 @@ public class recommendedSongs extends AppCompatActivity {
         listview.setOnItemClickListener((parent, view, position, id) -> {
             TextView title = view.findViewById(R.id.textView_title);
             TextView artist = view.findViewById(R.id.textView_artist);
-            Snackbar snackbar = Snackbar.make(view,title.getText().toString()+" feat "+artist.getText().toString()+" added to your playlist" , BaseTransientBottomBar.LENGTH_SHORT);
+//            Snackbar snackbar = Snackbar.make(view,title.getText().toString()+" feat "+artist.getText().toString()+" added to your playlist" , BaseTransientBottomBar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(view, "" + title.getText().toString().trim() + " added to your playlist", BaseTransientBottomBar.LENGTH_SHORT);
             snackbar.show();
             String filename = "play_lists.txt";
-            spotifyLogin.writeFile(this,title,artist,filename);
+            spotifyLogin.writeFile(this, title, artist, filename);
         });
     }
 }

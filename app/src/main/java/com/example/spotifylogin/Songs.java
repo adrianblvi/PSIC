@@ -1,4 +1,4 @@
-package com.example.spotifylogin;
+ package com.example.spotifylogin;
 
 import android.content.Intent;
 import android.os.Bundle;
