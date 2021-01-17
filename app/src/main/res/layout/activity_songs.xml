@@ -2,24 +2,64 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:verticalScrollbarPosition="right"
     tools:context=".Songs">
 
-    <ListView
-        android:id="@+id/listViewSongs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="45dp"
-        android:layout_marginBottom="70dp"
-        android:scrollbarStyle="insideOverlay"
+    <Button
+        android:id="@+id/newPlaylist"
+        android:layout_width="135dp"
+        android:layout_height="40dp"
+        android:background="?attr/colorPrimary"
+        android:text="Playlists"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_queue_music_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/songsButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/songsButton"
+        android:layout_width="135dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="460dp"
+        android:background="?attr/colorPrimary"
+        android:text="SONGS"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_music_note_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/artistButton"
+        app:layout_constraintStart_toEndOf="@+id/newPlaylist"
+        app:layout_constraintTop_toBottomOf="@+id/userName" />
+    <!--    <ListView-->
+    <!--        android:id="@+id/listViewSongs"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_marginTop="45dp"-->
+    <!--        android:layout_marginBottom="70dp"-->
+    <!--        android:scrollbarStyle="insideOverlay"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.0"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <Button
+        android:id="@+id/artistButton"
+        android:layout_width="135dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="584dp"
+        android:background="?attr/colorPrimary"
+        android:text="ARTISTS"
+        android:textSize="12sp"
+        app:icon="@drawable/ic_baseline_recent_actors_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/songsButton"
+        app:layout_constraintTop_toBottomOf="@+id/logOut" />
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar3"
@@ -28,72 +68,42 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@+id/listViewSongs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="193dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:text="Songs"
-        android:textAlignment="textStart"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/newPlaylist"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="135dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="0dp"
-        android:text="New Playlist"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/songsButton"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/songsButton"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="135dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="460dp"
-        android:layout_marginBottom="0dp"
-        android:text="SONGS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/artistButton"
-        app:layout_constraintStart_toEndOf="@+id/newPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/userName" />
-
-    <Button
-        android:id="@+id/artistButton"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="135dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="584dp"
-        android:layout_marginBottom="0dp"
-        android:text="ARTISTS"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="Songs"
+        android:textAlignment="textEnd"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/songsButton"
-        app:layout_constraintTop_toBottomOf="@+id/logOut" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/homeButton"
-        android:layout_width="48dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="332dp"
-        android:layout_marginTop="8dp"
-        android:text="Home"
-        android:textSize="10sp"
-        app:icon="@drawable/home"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="185dp"
+        android:layout_height="35dp"
+        android:queryHint="Search song"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:scrollbarStyle="insideOverlay"
+        android:focusable="true"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,10 +1,17 @@
 package com.example.spotifylogin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,61 +24,133 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class Songs extends AppCompatActivity {
+public class Songs extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    MainActivity mainActivity = new MainActivity();
+    SpotifyLogin spotifyLogin = new SpotifyLogin();
+    private ArrayList<ListItem> songList;
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private recyclerAdapter adapter;
+    private HashMap<String, SpotifySong> hashSongArtist;
+    private HashMap<String,SongFeatures> features;
+    ArrayList <SpotifySong> playlist_songs = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs);
 
-        Button btnHome = (Button) findViewById(R.id.homeButton);
-        btnHome.setOnClickListener(v -> mainActivity.openActivity(this,MainActivity.class));
+        Bundle bundle = getIntent().getExtras();
+        ArrayList <String> id_songs_send = bundle.getStringArrayList("id_songs_send");
+        String playlist_name = bundle.getString("namePlaylist");
+        ArrayList <String> id_songs = bundle.getStringArrayList("id_songs");
+        ArrayList <String> spotify_playlists = bundle.getStringArrayList("spotify_playlists");
+        String [] username = bundle.getStringArray("username");
 
-        Button btnClickMe = (Button) findViewById(R.id.newPlaylist);
-        btnClickMe.setOnClickListener(v -> mainActivity.openActivity(this,NewPlaylist.class));
+        Button btnClickMe = findViewById(R.id.newPlaylist);
+        btnClickMe.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SpotifyLogin.class);
+            intent.putExtra("id_songs", id_songs);
+            intent.putExtra("spotify_playlists", spotify_playlists);
+            intent.putExtra("username", username);
+            this.startActivity(intent);
+        });
+        Button btnSongs = findViewById(R.id.songsButton);
+        btnSongs.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Songs.class);
+            intent.putExtra("id_songs", id_songs);
+            intent.putExtra("spotify_playlists", spotify_playlists);
+            intent.putExtra("username", username);
+            intent.putExtra("id_songs_send",id_songs_send);
+            intent.putExtra("namePlaylist",playlist_name);
+            this.startActivity(intent);
+        });
+        Button btnArtists = findViewById(R.id.artistButton);
+        btnArtists.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Artists.class);
+            intent.putExtra("id_songs", id_songs);
+            intent.putExtra("spotify_playlists", spotify_playlists);
+            intent.putExtra("username", username);
+            intent.putExtra("id_songs_send",id_songs_send);
+            intent.putExtra("namePlaylist",playlist_name);
+            this.startActivity(intent);
+        });
 
-        Button btnSongs = (Button) findViewById(R.id.songsButton);
-        btnSongs.setOnClickListener(v -> mainActivity.openActivity(this,Songs.class));
-
-        Button btnArtists = (Button) findViewById(R.id.artistButton);
-        btnArtists.setOnClickListener(v -> mainActivity.openActivity(this,Artists.class));
-
-        HashMap<String, SpotifySong> hashSongArtist = new HashMap<>();
+        hashSongArtist = new HashMap<>();
+        features = new HashMap<>();
         try {
-            hashSongArtist = mainActivity.readSongs(this);
+            hashSongArtist = spotifyLogin.readSongs(this);
+            features = spotifyLogin.readFeatures(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ArrayList<SpotifySong> toArray = new ArrayList<>(hashSongArtist.values());
-        ArrayList<String> titles = new ArrayList<>();
-        ArrayList<ListItem> songsList = new ArrayList<>();
+        for(int i=0;i<id_songs_send.size();i++){
+            SpotifySong spotifySong = hashSongArtist.get(id_songs_send.get(i));
+            if(spotifySong!=null) playlist_songs.add(spotifySong);
+        }
+        recyclerView = findViewById(R.id.search);
+        searchView = findViewById(R.id.searchView);
+        songList = new ArrayList<>();
 
-        for (int i = 0; i < toArray.size(); i++) songsList.add(new ListItem(toArray.get(i).getTitle(),toArray.get(i).getArtists()));
-        for (int i = 0; i < toArray.size(); i++) titles.add(toArray.get(i).getTitle());
+        TextView textView = findViewById(R.id.textView6);
+        textView.setText(playlist_name.trim());
 
-        titles.sort(String::compareTo);
-        songsList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
+        if(playlist_name.startsWith("Based on")){
+            ArrayList<ListItem> aux = spotifyLogin.contentBased(id_songs_send,features,hashSongArtist);
+            songList.addAll(aux);
 
-        ListView listview = findViewById(R.id.listViewSongs);
-        AdapterSongs adapterSongs = new AdapterSongs(this, songsList);
-        listview.setAdapter(adapterSongs);
+        }else {
+            for (int i = 0; i < playlist_songs.size(); i++) {
+                songList.add(new ListItem(playlist_songs.get(i).getTitle().trim(), playlist_songs.get(i).getArtists()));
+            }
+        }
+        songList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
-        listview.setOnItemClickListener((parent, view, position, id) -> {
-            String song_id = null;
-            String title = titles.get(position);
-            for (int i = 0; i < toArray.size(); i++) {
-                if (title.equals(toArray.get(i).getTitle())) {
-                    song_id = toArray.get(i).getId();
+        setAdapter();
+        initListener();
+
+    }
+
+    private void initListener() {
+        searchView.setOnQueryTextListener(this);
+    }
+
+    private void setAdapter() {
+        adapter = new recyclerAdapter(songList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext() , DividerItemDecoration.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(position -> {
+            ListItem clicked = songList.get(position);
+            for (SpotifySong song : playlist_songs) {
+                if (clicked.getTitle().trim().equals(song.getTitle().trim())) {
+                    String id = song.getId();
+                    Intent myIntent = new Intent(recyclerView.getContext(), recommendedSongs.class);
+                    myIntent.putExtra("song_id",id);
+                    myIntent.putExtra("title",songList.get(position).getTitle());
+                    startActivity(myIntent);
                 }
             }
-            Intent myIntent = new Intent(view.getContext(), recommendedSongs.class);
-            myIntent.putExtra("song_id", song_id);
-            startActivity(myIntent);
-        }
-        );
+        });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+        return false;
     }
 }

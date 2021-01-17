@@ -4,8 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Artists">
+    tools:context=".artist_songs">
 
+    <ListView
+        android:id="@+id/lv_artist_songs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_artist_songs"
+        android:layout_width="406dp"
+        android:layout_height="40dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/list_view_reco_songs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
     <Button
         android:id="@+id/newPlaylist"
         android:layout_width="135dp"
@@ -17,6 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/songsButton"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/songsButton"
@@ -47,50 +71,26 @@
         app:layout_constraintTop_toBottomOf="@+id/logOut" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_artists"
+        android:id="@+id/toolbar3"
         android:layout_width="406dp"
         android:layout_height="40dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@+id/listViewArtists"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
-
-    <ListView
-        android:id="@+id/listViewArtists"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/search"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="70dp"
-        android:scrollbarStyle="insideOverlay"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
-        android:text="Songs"
-        android:textAlignment="textEnd"
+        android:id="@+id/tvArtist_song"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:text="Artist Songs"
+        android:textAlignment="textStart"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <SearchView
-        android:id="@+id/search"
-        android:layout_width="185dp"
-        android:layout_height="35dp"
-        android:queryHint="Search Name"
-        app:layout_constraintBottom_toTopOf="@+id/listViewArtists"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
