@@ -36,8 +36,8 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
     private SearchView searchView;
     private recyclerAdapter adapter;
     private HashMap<String, SpotifySong> hashSongArtist;
-    private HashMap<String,SongFeatures> features;
-    ArrayList <SpotifySong> playlist_songs = new ArrayList<>();
+    private HashMap<String, SongFeatures> features;
+    ArrayList<SpotifySong> playlist_songs = new ArrayList<>();
 
 
     @Override
@@ -46,11 +46,11 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         setContentView(R.layout.activity_songs);
 
         Bundle bundle = getIntent().getExtras();
-        ArrayList <String> id_songs_send = bundle.getStringArrayList("id_songs_send");
+        ArrayList<String> id_songs_send = bundle.getStringArrayList("id_songs_send");
         String playlist_name = bundle.getString("namePlaylist");
-        ArrayList <String> id_songs = bundle.getStringArrayList("id_songs");
-        ArrayList <String> spotify_playlists = bundle.getStringArrayList("spotify_playlists");
-        String [] username = bundle.getStringArray("username");
+        ArrayList<String> id_songs = bundle.getStringArrayList("id_songs");
+        ArrayList<String> spotify_playlists = bundle.getStringArrayList("spotify_playlists");
+        String[] username = bundle.getStringArray("username");
 
         Button btnClickMe = findViewById(R.id.newPlaylist);
         btnClickMe.setOnClickListener(v -> {
@@ -66,8 +66,8 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
             intent.putExtra("id_songs", id_songs);
             intent.putExtra("spotify_playlists", spotify_playlists);
             intent.putExtra("username", username);
-            intent.putExtra("id_songs_send",id_songs_send);
-            intent.putExtra("namePlaylist",playlist_name);
+            intent.putExtra("id_songs_send", id_songs_send);
+            intent.putExtra("namePlaylist", playlist_name);
             this.startActivity(intent);
         });
         Button btnArtists = findViewById(R.id.artistButton);
@@ -76,8 +76,8 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
             intent.putExtra("id_songs", id_songs);
             intent.putExtra("spotify_playlists", spotify_playlists);
             intent.putExtra("username", username);
-            intent.putExtra("id_songs_send",id_songs_send);
-            intent.putExtra("namePlaylist",playlist_name);
+            intent.putExtra("id_songs_send", id_songs_send);
+            intent.putExtra("namePlaylist", playlist_name);
             this.startActivity(intent);
         });
 
@@ -85,14 +85,14 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         features = new HashMap<>();
         try {
             hashSongArtist = spotifyLogin.readSongs(this);
-            features = spotifyLogin.readFeatures(this);
+//            features = spotifyLogin.readFeatures(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for(int i=0;i<id_songs_send.size();i++){
+        for (int i = 0; i < id_songs_send.size(); i++) {
             SpotifySong spotifySong = hashSongArtist.get(id_songs_send.get(i));
-            if(spotifySong!=null) playlist_songs.add(spotifySong);
+            if (spotifySong != null) playlist_songs.add(spotifySong);
         }
         recyclerView = findViewById(R.id.search);
         searchView = findViewById(R.id.searchView);
@@ -102,14 +102,15 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         textView.setText(playlist_name.trim());
 
         if(playlist_name.startsWith("Based on")){
-            ArrayList<ListItem> aux = spotifyLogin.contentBased(id_songs_send,features,hashSongArtist);
+            ArrayList<ListItem> aux = new ArrayList<>();
+            aux.add(new ListItem("Cantando"," Kase.O"));
             songList.addAll(aux);
-
         }else {
             for (int i = 0; i < playlist_songs.size(); i++) {
                 songList.add(new ListItem(playlist_songs.get(i).getTitle().trim(), playlist_songs.get(i).getArtists()));
             }
         }
+
         songList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
         setAdapter();
@@ -125,7 +126,7 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         adapter = new recyclerAdapter(songList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext() , DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -135,8 +136,8 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
                 if (clicked.getTitle().trim().equals(song.getTitle().trim())) {
                     String id = song.getId();
                     Intent myIntent = new Intent(recyclerView.getContext(), recommendedSongs.class);
-                    myIntent.putExtra("song_id",id);
-                    myIntent.putExtra("title",songList.get(position).getTitle());
+                    myIntent.putExtra("song_id", id);
+                    myIntent.putExtra("title", songList.get(position).getTitle());
                     startActivity(myIntent);
                 }
             }
