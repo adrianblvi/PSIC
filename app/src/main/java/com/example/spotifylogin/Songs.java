@@ -85,7 +85,7 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         features = new HashMap<>();
         try {
             hashSongArtist = spotifyLogin.readSongs(this);
-            features = spotifyLogin.readFeatures(this);
+//            features = spotifyLogin.readFeatures(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,14 +101,15 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
         TextView textView = findViewById(R.id.textView6);
         textView.setText(playlist_name.trim());
 
-        if(playlist_name.startsWith("Based on")){
-            ArrayList<ListItem> aux = spotifyLogin.contentBased(id_songs_send,features,hashSongArtist);
-            songList.addAll(aux);
-
-        }else {
-            for (int i = 0; i < playlist_songs.size(); i++) {
-                songList.add(new ListItem(playlist_songs.get(i).getTitle().trim(), playlist_songs.get(i).getArtists()));
-            }
+//        if(playlist_name.startsWith("Based on")){
+//            ArrayList<ListItem> aux = spotifyLogin.contentBased(id_songs_send,features,hashSongArtist);
+//            songList.addAll(aux);
+//
+//        }else {
+//
+//        }
+        for (int i = 0; i < playlist_songs.size(); i++) {
+            songList.add(new ListItem(playlist_songs.get(i).getTitle().trim(), playlist_songs.get(i).getArtists()));
         }
         songList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
