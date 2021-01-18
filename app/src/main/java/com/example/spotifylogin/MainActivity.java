@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         request = builder.build();
+        builder.setShowDialog(true);
         builder.setScopes(new String[]{"streaming"});
 
 
