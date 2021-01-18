@@ -11,37 +11,23 @@
         android:theme="@style/Theme.SpotifyLogin">
         <activity
             android:name=".artist_songs"
-<<<<<<< HEAD
             android:label="Artist Songs" />
-=======
-            android:label="Artist Songs"></activity>
->>>>>>> e15652faaf753b48a7a542888020eb435ed0529f
 
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-<<<<<<< HEAD
         <activity android:name=".Artists"
             android:label="Artists" />
 
         <activity android:name=".recommendedSongs"
             android:label="Recommended Songs" />
-=======
-        <activity android:name=".Artists" />
-
-        <activity android:name=".recommendedSongs" />
->>>>>>> e15652faaf753b48a7a542888020eb435ed0529f
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-<<<<<<< HEAD
         <activity android:name=".Songs"
-        android:label="Songs"/>
-=======
-        <activity android:name=".Songs" />
->>>>>>> e15652faaf753b48a7a542888020eb435ed0529f
+            android:label="Songs"/>
         <activity android:name=".NewPlaylist" />
         <activity android:name=".SpotifyLogin"/>
         <activity android:name=".MainActivity">
