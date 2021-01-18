@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +30,8 @@ public class SpotifyLogin extends AppCompatActivity {
     private ArrayList<String> id_songs;
     private ArrayList<String> spotify_playlists;
     private String[] username;
+    private static final String REDIRECT_URI = "com.spotifyapiexample://callback";
+    private static final String CLIENT_ID = "863f528d3eea4a9ea598640d0e31895f";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +47,18 @@ public class SpotifyLogin extends AppCompatActivity {
         TextView textView = findViewById(R.id.userName);
         if (username[0] != null) textView.setText(username[0].replace("\"", ""));
         ArrayList<String> correctNames = new ArrayList<>();
+        ArrayList<String> backup = new ArrayList<>();
         for (int i = 0; i < spotify_playlists.size(); i++) {
             String name = "Based on " + spotify_playlists.get(i).replace("\"", "").trim();
             correctNames.add(spotify_playlists.get(i).replace("\"", "").trim());
-            correctNames.add(name);
+            backup.add(name);
         }
+        correctNames.addAll(backup);
         correctNames.add("Recommended songs playlist");
         Button btnLogOut = findViewById(R.id.logOut);
         btnLogOut.setOnClickListener(v -> {
             openActivity(this, MainActivity.class);
+            logout();
         });
 
         ListView listview = findViewById(R.id.Spotify_playlists);
@@ -84,6 +93,12 @@ public class SpotifyLogin extends AppCompatActivity {
         );
     }
 
+    public void logout(){
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
+        builder.setScopes(new String[]{"streaming"});
+        builder.setShowDialog(true);
+
+    }
     public ArrayList<ListItem> readFile(Context context) {
         FileInputStream fis = null;
         ArrayList<ListItem> songsList = new ArrayList<>();

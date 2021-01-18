@@ -1,4 +1,9 @@
-package com.example.spotifylogin;
+ package com.example.spotifylogin;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -7,26 +12,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class Songs extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -110,6 +98,10 @@ public class Songs extends AppCompatActivity implements SearchView.OnQueryTextLi
 //        }
         for (int i = 0; i < playlist_songs.size(); i++) {
             songList.add(new ListItem(playlist_songs.get(i).getTitle().trim(), playlist_songs.get(i).getArtists()));
+        }
+        if (songList.size()==0){
+            ListItem item = new ListItem("NO SONG"," NO SONG");
+            songList.add(item);
         }
         songList.sort((l1, l2) -> l1.getTitle().compareTo(l2.getTitle()));
 
